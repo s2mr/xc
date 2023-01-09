@@ -1,6 +1,57 @@
 # xc (EXPERIMENTAL)
 Open your xcode project with Xcode of specific version.
 
+## Examples
+
+```
+$ xc -v 14.2.0 # Open project file with Xcode 14.2.0
+```
+
+```
+xc > xc list
+Available Xcode:
+14.2    /Applications/Xcode.app         <Selected>
+14.1    /Applications/Xcode14.1.app
+13.4.1  /Applications/Xcode13.4.1.app
+13.2.1  /Applications/Xcode13.2.1.app
+```
+
+## Installation
+
+### [Swift Package Manager](https://github.com/apple/swift-package-manager)
+
+Add the following to the dependencies of your `Package.swift`:
+
+```swift
+dependencies: [
+    .package(url: "https://github.com/s2mr/xc.git", from: "xc version"),
+]
+```
+
+Run command:
+
+```sh
+swift run -c release xc [COMMAND] [OPTIONS]
+```
+
+### [Mint](https://github.com/yonaskolb/Mint)
+
+Install with Mint by following command:
+
+```sh
+mint install s2mr/xc
+```
+
+Run command:
+
+```sh
+mint run s2mr/xc [COMMAND] [OPTIONS]
+```
+
+### Using a pre-built binary
+
+You can also install xc by downloading `xc.zip` from the latest GitHub release.
+
 ## Setup
 
 This command needs sudo password.
@@ -24,21 +75,6 @@ Or, please create PR to fixup🙇‍♂️
 1. User specified version <Optional options>
 2. `.xcode-version` <Optional file>
 3. `$ xcode-select`
-
-## Examples
-
-```
-$ xc -v 14.2.0 # Open project file with Xcode 14.2.0
-```
-
-```
-xc > xc list
-Available Xcode:
-14.2    /Applications/Xcode.app         <Selected>
-14.1    /Applications/Xcode14.1.app
-13.4.1  /Applications/Xcode13.4.1.app
-13.2.1  /Applications/Xcode13.2.1.app
-```
 
 ## Help
 
