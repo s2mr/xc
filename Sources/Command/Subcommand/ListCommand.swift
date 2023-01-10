@@ -11,7 +11,7 @@ extension MainTool {
             let xcodeSelectVersion = try Xcode.xcodeSelectVersion()
             let texts = try Xcode.availableApplicationURLs().map { url -> String in
                 let plist = try Xcode.plist(atApplicationURL: url)
-                let selectedText = try plist.version() == xcodeSelectVersion ? "<Selected>" : ""
+                let selectedText = try plist.version() == xcodeSelectVersion ? "<xcode-select>" : ""
                 return "\(plist.shortVersion)\t\(url.path)\t\t\(selectedText)"
             }
             print("Available Xcode:")
