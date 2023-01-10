@@ -5,6 +5,13 @@ enum Xcode {
         NSWorkspace.shared.urlsForApplications(withBundleIdentifier: "com.apple.dt.Xcode")
     }
 
+    static func availableVersions() throws -> [String] {
+        return try availableApplicationURLs().map { url -> String in
+            let plist = try Xcode.plist(atApplicationURL: url)
+            return plist.shortVersion
+        }
+    }
+
     static func plist(atApplicationURL url: URL) throws -> XcodePlist {
         let plistURL = url.appendingPathComponent("Contents/Info.plist")
         let data = try Data(contentsOf: plistURL)
@@ -20,22 +27,13 @@ enum Xcode {
         if let commandLineVersion = try version.map({ try Version(string: $0) }) {
             return commandLineVersion
         }
-        if let xcodeVersion = try xcodeVersion() {
+        if let xcodeVersion = try CurrentDirectory.xcodeVersion() {
             return xcodeVersion
         }
         if let xcodeSelectVersion = try xcodeSelectVersion() {
             return xcodeSelectVersion
         }
         return nil
-    }
-
-    private static func xcodeVersion() throws -> Version? {
-        let fileURL = URL(fileURLWithPath: FileManager.default.currentDirectoryPath + "/.xcode-version")
-        guard FileManager.default.fileExists(atPath: fileURL.path) else { return nil }
-        let data = try Data(contentsOf: fileURL)
-        guard let versionString = String(data: data, encoding: .utf8)?
-            .trimmingCharacters(in: .whitespacesAndNewlines) else { return nil }
-        return try Version(string: versionString)
     }
 
     static func xcodeSelectVersion() throws -> Version? {

@@ -9,7 +9,8 @@ struct MainTool: ParsableCommand {
         subcommands: [
             List.self,
             Open.self,
-            ConfigCommand.self
+            ConfigCommand.self,
+            Env.self
         ],
         defaultSubcommand: Open.self
     )
