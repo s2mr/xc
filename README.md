@@ -8,7 +8,7 @@ $ xc -v 14.2.0 # Open project file with Xcode 14.2.0
 ```
 
 ```
-xc > xc list
+$ xc list
 Available Xcode:
 14.2    /Applications/Xcode.app         <Selected>
 14.1    /Applications/Xcode14.1.app
