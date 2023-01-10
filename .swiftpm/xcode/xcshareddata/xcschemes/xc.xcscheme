@@ -145,7 +145,7 @@
          </CommandLineArgument>
          <CommandLineArgument
             argument = "open -v 13.2.1"
-            isEnabled = "YES">
+            isEnabled = "NO">
          </CommandLineArgument>
          <CommandLineArgument
             argument = "config write --sudo-password kshimoran!22"

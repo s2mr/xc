@@ -10,12 +10,40 @@ extension MainTool {
         }
 
         struct Write: ParsableCommand {
+            enum WriteError: Error, CustomStringConvertible {
+                case valueUnspecified
+
+                var description: String {
+                    switch self {
+                    case .valueUnspecified:
+                        return "Please pass one or more values."
+                    }
+                }
+            }
+
             @Option
-            var sudoPassword: String
+            var sudoPassword: String?
+
+            @Option
+            var autoXcodeSelectEnabled: Bool?
 
             func run() throws {
+                let isValueUnspecified = [
+                    sudoPassword.isNone,
+                    autoXcodeSelectEnabled.isNone
+                ].allSatisfy { $0 }
+
+                if isValueUnspecified {
+                    throw WriteError.valueUnspecified
+                }
+
                 var config = try Config.get()
-                config.sudoPassword = sudoPassword
+                if let sudoPassword {
+                    config.sudoPassword = sudoPassword
+                }
+                if let autoXcodeSelectEnabled {
+                    config.autoXcodeSelectEnabled = autoXcodeSelectEnabled
+                }
                 try config.write()
             }
         }
@@ -28,5 +56,14 @@ extension MainTool {
                 Write.self
             ]
         )
+    }
+}
+
+extension Optional {
+    var isNone: Bool {
+        if case .none = self {
+            return true
+        }
+        return false
     }
 }

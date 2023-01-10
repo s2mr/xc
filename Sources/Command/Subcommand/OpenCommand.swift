@@ -50,17 +50,10 @@ extension MainTool {
                 let plist = try Xcode.plist(atApplicationURL: url)
                 let preferredVersion = preferredVersion
                 return try Version(string: plist.shortVersion) == preferredVersion
-            }?.schemeRemoved()
+            }
 
             guard let xcodeURL else {
                 throw OpenError.xcodeURLNotFound(version: preferredVersion)
-            }
-
-            try Config.createIfNotFound()
-            let config = try Config.get()
-
-            if config.sudoPassword.isEmpty {
-                throw OpenError.sudoPasswordEmpty
             }
 
             let fileURL = try preferredFileURL()
@@ -68,11 +61,31 @@ extension MainTool {
                 throw OpenError.preferredFileNotFound
             }
 
+            try Config.createIfNotFound()
+            let config = try Config.get()
+
+            var isXcodeSelectExecuted = false
+            if config.autoXcodeSelectEnabled {
+                if config.sudoPassword.isEmpty {
+                    throw OpenError.sudoPasswordEmpty
+                }
+
+                let result = Bash.launch("echo \(config.sudoPassword) | sudo -S xcode-select --switch \(xcodeURL.path)")
+                result.print()
+                isXcodeSelectExecuted = true
+            }
+
+            let result = Bash.launch("open -a \(xcodeURL.path) \(fileURL.path)")
+            result.print()
+
             print("Open: \(fileURL.lastPathComponent)")
             print("With: Xcode \(preferredVersion) (\(xcodeURL.path))")
 
-            let result = Bash.launch("echo \(config.sudoPassword) | sudo -S open -a \(xcodeURL) \(fileURL.path)")
-            result.print()
+            if isXcodeSelectExecuted {
+                let developerDir = Bash.launch("xcode-select --print-path").string()?
+                    .trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
+                print("Developer directory has changed to: \(developerDir)")
+            }
         }
 
         /// 1. path

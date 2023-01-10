@@ -54,7 +54,7 @@ You can also install xc by downloading `xc.zip` from the latest GitHub release.
 
 ## Setup
 
-This command needs sudo password.
+This command's automatically changing xcode-select path feature needs sudo password.
 
 Please set password via below command.
 
@@ -62,7 +62,11 @@ Please set password via below command.
 $ xc config write --sudo-password `<Your password here>`
 ```
 
-Or, please create PR to fixup🙇‍♂️
+Or, you can disable this feature via below command.
+
+```
+$ xc config write --auto-xcode-select-enabled false
+```
 
 ## Feature
 ### Automatic project file searching (priority)

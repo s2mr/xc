@@ -1,6 +1,6 @@
 import Foundation
 
-struct Config: Codable {
+struct Config {
     private static var applicationDirectoryURL: URL {
         return FileManager.default.homeDirectoryForCurrentUser
             .appendingPathComponent(".config/xc")
@@ -29,4 +29,13 @@ struct Config: Codable {
     }
 
     var sudoPassword: String = ""
+    var autoXcodeSelectEnabled: Bool = true
+}
+
+extension Config: Codable {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.sudoPassword = try container.decode(String.self, forKey: .sudoPassword)
+        self.autoXcodeSelectEnabled = try container.decodeIfPresent(Bool.self, forKey: .autoXcodeSelectEnabled) ?? true
+    }
 }
