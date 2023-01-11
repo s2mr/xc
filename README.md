@@ -61,6 +61,14 @@ You can setting sudo password via `$ xc config`
 >
 > `$ xc config write --sudo-password <sudo-password> --auto-xcode-select-enabled true`
 
+### Command completion
+
+This command is built on [swift-argument-parser](https://github.com/apple/swift-argument-parser).
+
+Please refer to [this article](https://github.com/apple/swift-argument-parser/blob/main/Sources/ArgumentParser/Documentation.docc/Articles/InstallingCompletionScripts.md#installing-zsh-completions
+).
+
+Replace `example` with `xc`.
 
 ## Installation
 

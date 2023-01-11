@@ -15,23 +15,10 @@ let package = Package(
         .executableTarget(
             name: "Command",
             dependencies: [
-                "Core",
-                "Model",
                 .product(name: "ArgumentParser", package: "swift-argument-parser")
             ]),
-        .target(
-            name: "Core",
-            dependencies: [
-                "Model"
-            ]),
-        .target(
-            name: "Model"
-        ),
         .testTarget(
             name: "CommandTests",
             dependencies: ["Command"]),
-        .testTarget(
-            name: "CoreTests",
-            dependencies: ["Core"]),
     ]
 )

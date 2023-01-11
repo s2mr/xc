@@ -12,10 +12,10 @@ enum Xcode {
         }
     }
 
-    static func plist(atApplicationURL url: URL) throws -> XcodePlist {
-        let plistURL = url.appendingPathComponent("Contents/Info.plist")
+    static func plist(atApplicationURL url: URL) throws -> XcodeVersionPlist {
+        let plistURL = url.appendingPathComponent("Contents/version.plist")
         let data = try Data(contentsOf: plistURL)
-        return try PropertyListDecoder().decode(XcodePlist.self, from: data)
+        return try PropertyListDecoder().decode(XcodeVersionPlist.self, from: data)
     }
 
     /// Get preferred versions for opening Xcode.
