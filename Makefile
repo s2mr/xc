@@ -25,9 +25,5 @@ zip: build
 	zip -j $(TOOL_NAME).zip $(TOOL_BIN)
 
 upload-zip: zip
-	@[ -n "$(GITHUB_TOKEN)" ] || (echo "\nERROR: Make sure setting environment variable 'GITHUB_TOKEN'." && exit 1)
-	@[ -n "$(GITHUB_RELEASE_ID)" ] || (echo "\nERROR: Make sure setting environment variable 'GITHUB_RELEASE_ID'." && exit 1)
-	curl -sSL -X POST \
-	  -H "Authorization: token $(GITHUB_TOKEN)" \
-	  -H "Content-Type: application/zip" \
-	  --upload-file "./$(TOOL_NAME).zip" "https://uploads.github.com/repos/$(GITHUB_REPO)/releases/$(GITHUB_RELEASE_ID)/assets?name=$(TOOL_NAME).zip"
+	@[ -n "$(TAG)" ] || (echo "\nERROR: Make sure setting environment variable 'TAG'." && exit 1)
+	gh release upload $(TAG) xc.zip

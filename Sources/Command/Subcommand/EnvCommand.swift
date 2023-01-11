@@ -21,14 +21,18 @@ extension MainTool {
             }
             print()
 
+            print("# Preferred project file")
             let preferredProjectFileURL = try CurrentDirectory.preferredProjectFileURL()
+            if preferredProjectFileURL.isNone {
+                return print("Project file not found in current directory.")
+            }
+
             let xcworkspaceURL = try CurrentDirectory.xcworkspaceURL()
             let xcodeprojURL = try CurrentDirectory.xcodeprojURL()
             let packageSwiftURL = try CurrentDirectory.packageSwiftURL()
-            print("# Preferred project file")
-            print("xcworkspace: \(xcworkspaceURL?.lastPathComponent ?? "")\t\(xcworkspaceURL == preferredProjectFileURL ? "<Preferred>" : "")")
-            print("xcodeproj: \(xcodeprojURL?.lastPathComponent ?? "")\t\(xcodeprojURL == preferredProjectFileURL ? "<Preferred>" : "")")
-            print("packageSwift: \(packageSwiftURL?.lastPathComponent ?? "")\t\(packageSwiftURL == preferredProjectFileURL ? "<Preferred>" : "")")
+            print(".xcworkspace: \(xcworkspaceURL?.lastPathComponent ?? "")\t\(xcworkspaceURL == preferredProjectFileURL ? "<Preferred>" : "")")
+            print(".xcodeproj: \(xcodeprojURL?.lastPathComponent ?? "")\t\(xcodeprojURL == preferredProjectFileURL ? "<Preferred>" : "")")
+            print("Package.swift: \(packageSwiftURL?.lastPathComponent ?? "")\t\(packageSwiftURL == preferredProjectFileURL ? "<Preferred>" : "")")
         }
     }
 }
