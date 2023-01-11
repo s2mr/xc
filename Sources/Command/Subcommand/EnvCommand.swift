@@ -12,7 +12,7 @@ extension MainTool {
             let xcodeSelectVersion = try Xcode.xcodeSelectVersion()
             let dataSets = [
                 VersionDataSet(name: ".xcode-version", version: xcodeVersion),
-                VersionDataSet(name: "$xcode-select", version: xcodeSelectVersion),
+                VersionDataSet(name: " $xcode-select", version: xcodeSelectVersion),
             ]
             let preferredIndex = dataSets.firstIndex(where: { $0.version == preferredVersion })
             print("# Preferred Xcode version")
@@ -30,8 +30,8 @@ extension MainTool {
             let xcworkspaceURL = try CurrentDirectory.xcworkspaceURL()
             let xcodeprojURL = try CurrentDirectory.xcodeprojURL()
             let packageSwiftURL = try CurrentDirectory.packageSwiftURL()
-            print(".xcworkspace: \(xcworkspaceURL?.lastPathComponent ?? "")\t\(xcworkspaceURL == preferredProjectFileURL ? "<Preferred>" : "")")
-            print(".xcodeproj: \(xcodeprojURL?.lastPathComponent ?? "")\t\(xcodeprojURL == preferredProjectFileURL ? "<Preferred>" : "")")
+            print(" .xcworkspace: \(xcworkspaceURL?.lastPathComponent ?? "")\t\(xcworkspaceURL == preferredProjectFileURL ? "<Preferred>" : "")")
+            print("   .xcodeproj: \(xcodeprojURL?.lastPathComponent ?? "")\t\(xcodeprojURL == preferredProjectFileURL ? "<Preferred>" : "")")
             print("Package.swift: \(packageSwiftURL?.lastPathComponent ?? "")\t\(packageSwiftURL == preferredProjectFileURL ? "<Preferred>" : "")")
         }
     }
