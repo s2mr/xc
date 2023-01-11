@@ -29,13 +29,13 @@ struct Config {
     }
 
     var sudoPassword: String = ""
-    var autoXcodeSelectEnabled: Bool = true
+    var autoXcodeSelectEnabled: Bool = false
 }
 
 extension Config: Codable {
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.sudoPassword = try container.decode(String.self, forKey: .sudoPassword)
-        self.autoXcodeSelectEnabled = try container.decodeIfPresent(Bool.self, forKey: .autoXcodeSelectEnabled) ?? true
+        self.autoXcodeSelectEnabled = try container.decodeIfPresent(Bool.self, forKey: .autoXcodeSelectEnabled) ?? false
     }
 }

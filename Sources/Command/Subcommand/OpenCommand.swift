@@ -2,20 +2,19 @@ import ArgumentParser
 import Foundation
 
 private enum OpenError: Error, CustomStringConvertible {
-    case xcodeURLNotFound(version: Version)
+    case xcodeURLNotFound(version: Version?)
     case sudoPasswordEmpty
-    case preferredVersionMissing
     case internalError
     case preferredFileNotFound
 
     var description: String {
         switch self {
-        case .xcodeURLNotFound(let version):
-            return "Xcode is not found for version: \(version)"
+        case .xcodeURLNotFound(.some(let version)):
+            return "Xcode is not found for version: \(version)."
+        case .xcodeURLNotFound(nil):
+            return "Xcode is not found."
         case .sudoPasswordEmpty:
-            return "This command needs sudoPassword.\nPlease set password by executing `xc config set sudoPassword=<Your Password>`"
-        case .preferredVersionMissing:
-            return "preferredVersionMissing"
+            return "This command needs sudo password.\nPlease set password by executing `xc config write --sudo-password=<Your Password>`."
         case .internalError:
             return "Internal error"
         case .preferredFileNotFound:
@@ -43,19 +42,28 @@ extension MainTool {
         )
         var nope: Bool = false
 
-        @Argument(help: "File path")
+        @Argument(
+            help: "File path",
+            completion: .file()
+        )
         var path: String?
 
         func run() throws {
-            guard let preferredVersion = try Xcode.preferredVersion(userSpecifyVersion: version) else {
-                throw OpenError.preferredVersionMissing
-            }
+            let preferredVersion = try Xcode.preferredVersion(userSpecifyVersion: version)
 
-            let xcodeURL = try Xcode.availableApplicationURLs().first { url in
-                let plist = try Xcode.plist(atApplicationURL: url)
-                let preferredVersion = preferredVersion
-                return try Version(string: plist.shortVersion) == preferredVersion
-            }
+            let xcodeURL: URL? = try {
+                let availableXcodeURLs = Xcode.availableApplicationURLs()
+                guard let preferredVersion else {
+                    return availableXcodeURLs.first(where: { $0.lastPathComponent == "Xcode.app" })
+                        ?? availableXcodeURLs.first
+                }
+
+                return try availableXcodeURLs.first { url in
+                    let plist = try Xcode.plist(atApplicationURL: url)
+                    let preferredVersion = preferredVersion
+                    return try Version(string: plist.shortVersion) == preferredVersion
+                }
+            }()
 
             guard let xcodeURL else {
                 throw OpenError.xcodeURLNotFound(version: preferredVersion)
@@ -95,12 +103,14 @@ extension MainTool {
                 throw CustomError(message: result.standardError.string() ?? "")
             }
 
+            let openedXcodeVersion = try Xcode.plist(atApplicationURL: xcodeURL).version()
+
             if let fileURL {
                 print("Open: \(fileURL.lastPathComponent)")
-                print("With: Xcode \(preferredVersion) (\(xcodeURL.path))")
+                print("With: Xcode \(openedXcodeVersion) (\(xcodeURL.path))")
             }
             else {
-                print("Open: Xcode \(preferredVersion) (\(xcodeURL.path))")
+                print("Open: Xcode \(openedXcodeVersion) (\(xcodeURL.path))")
             }
 
             if isXcodeSelectExecuted {
