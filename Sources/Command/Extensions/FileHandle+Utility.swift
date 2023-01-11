@@ -7,6 +7,7 @@ extension FileHandle {
     }
 
     func string() -> String? {
+        try? seek(toOffset: 0)
         let data = readDataToEndOfFile()
         return String(data: data, encoding: .utf8)
     }

@@ -40,10 +40,9 @@ enum Xcode {
         // e.g.
         //   - `/Applications/Xcode.app/Contents/Developer`
         //   - `/Library/Developer/CommandLineTools`
-
         let result = Bash.launchSync("xcode-select --print-path")
         guard result.process.terminationStatus == 0,
-              let path = result.standardOutput.string() else {
+              let path = result.standardOutput.string()?.trimmingCharacters(in: .newlines) else {
             throw CustomError(message: result.standardError.string() ?? "")
         }
 
