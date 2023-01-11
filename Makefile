@@ -1,6 +1,5 @@
 SWIFT_BUILD_FLAGS := -c release --disable-sandbox --arch arm64 --arch x86_64
 TOOL_NAME := xc
-GITHUB_REPO := s2mr/$(TOOL_NAME)
 
 TOOL_BIN_DIR := $(shell swift build $(SWIFT_BUILD_FLAGS) --show-bin-path)
 TOOL_BIN := $(TOOL_BIN_DIR)/$(TOOL_NAME)
@@ -26,4 +25,11 @@ zip: build
 
 upload-zip: zip
 	@[ -n "$(TAG)" ] || (echo "\nERROR: Make sure setting environment variable 'TAG'." && exit 1)
-	gh release upload $(TAG) xc.zip
+	gh release upload $(TAG) $(TOOL_NAME).zip
+
+delete-zip:
+	@[ -n "$(TAG)" ] || (echo "\nERROR: Make sure setting environment variable 'TAG'." && exit 1)
+	gh release delete-asset $(TAG) $(TOOL_NAME).zip
+
+sha256-zip:
+	shasum -a 256 $(TOOL_NAME).zip
