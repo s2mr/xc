@@ -1,6 +1,5 @@
 SWIFT_BUILD_FLAGS := -c release --disable-sandbox --arch arm64 --arch x86_64
 TOOL_NAME := xc
-XCODE_DEFAULT_TOOLCHAIN := /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain
 GITHUB_REPO := s2mr/$(TOOL_NAME)
 
 TOOL_BIN_DIR := $(shell swift build $(SWIFT_BUILD_FLAGS) --show-bin-path)
@@ -9,7 +8,7 @@ TOOL_BIN := $(TOOL_BIN_DIR)/$(TOOL_NAME)
 .PHONY: $(MAKECMDGOALS)
 
 build-cp-zsh: build
-	sudo rm /usr/local/bin/xc
+	sudo rm -f /usr/local/bin/xc
 	sudo cp $(TOOL_BIN) /usr/local/bin/xc
 	make install-completion-zsh
 

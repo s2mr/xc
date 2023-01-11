@@ -38,8 +38,11 @@ enum Xcode {
 
     static func xcodeSelectVersion() throws -> Version? {
         // e.g. `/Applications/Xcode.app/Contents/Developer`
-        #warning("TODO: check termination status")
-        guard let path = Bash.launch("xcode-select --print-path").string() else { return nil }
+        let result = Bash.launchSync("xcode-select --print-path")
+        guard result.process.terminationStatus == 0,
+              let path = result.standardOutput.string() else {
+            throw CustomError(message: result.standardError.string() ?? "")
+        }
         let applicationURL = URL(fileURLWithPath: path).deletingLastPathComponent().deletingLastPathComponent()
         let shortVersion = try Xcode.plist(atApplicationURL: applicationURL).shortVersion
         return try Version(string: shortVersion)

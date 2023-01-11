@@ -1,18 +1,29 @@
 import Foundation
 
 enum Bash {
-    #warning("TODO: return Process") 
-    static func launch(_ command: String) -> FileHandle {
-        let task = Process()
-        let pipe = Pipe()
+    struct LaunchResult {
+        var process: Process
+        var standardOutput: FileHandle
+        var standardError: FileHandle
+    }
 
-        task.standardOutput = pipe
-        task.standardError = pipe
+    static func launchSync(_ command: String) -> LaunchResult {
+        let task = Process()
+        let standardOutput = Pipe()
+        let standardError = Pipe()
+
+        task.standardOutput = standardOutput
+        task.standardError = standardError
         task.arguments = ["-c", command]
         task.launchPath = "/bin/bash"
         task.standardInput = nil
         task.launch()
+        task.waitUntilExit()
 
-        return pipe.fileHandleForReading
+        return LaunchResult(
+            process: task,
+            standardOutput: standardOutput.fileHandleForReading,
+            standardError: standardError.fileHandleForReading
+        )
     }
 }

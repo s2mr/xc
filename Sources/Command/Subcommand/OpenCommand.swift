@@ -70,8 +70,10 @@ extension MainTool {
                     throw OpenError.sudoPasswordEmpty
                 }
 
-                let result = Bash.launch("echo \(config.sudoPassword) | sudo -S xcode-select --switch \(xcodeURL.path)")
-                result.print()
+                let result = Bash.launchSync("echo \(config.sudoPassword) | sudo -S xcode-select --switch \(xcodeURL.path)")
+                if result.process.terminationStatus != 0 {
+                    throw CustomError(message: result.standardError.string() ?? "")
+                }
                 isXcodeSelectExecuted = true
             }
 
@@ -88,8 +90,11 @@ extension MainTool {
                 }
             }
 
-            let result = Bash.launch("open -a \(xcodeURL.path) \(fileURL?.path ?? "")")
-            result.print()
+            let result = Bash.launchSync("open -a \(xcodeURL.path) \(fileURL?.path ?? "")")
+            if result.process.terminationStatus != 0 {
+                throw CustomError(message: result.standardError.string() ?? "")
+            }
+
             if let fileURL {
                 print("Open: \(fileURL.lastPathComponent)")
                 print("With: Xcode \(preferredVersion) (\(xcodeURL.path))")
@@ -99,7 +104,13 @@ extension MainTool {
             }
 
             if isXcodeSelectExecuted {
-                let developerDir = Bash.launch("xcode-select --print-path").string()?
+                let result = Bash.launchSync("xcode-select --print-path")
+
+                if result.process.terminationStatus != 0 {
+                    throw CustomError(message: result.standardError.string() ?? "")
+                }
+
+                let developerDir = result.standardOutput.string()?
                     .trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
                 print("Developer directory has changed to: \(developerDir)")
             }
