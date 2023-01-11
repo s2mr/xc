@@ -1,14 +1,22 @@
 # xc
 Open the Xcode project file with the specified version
 
-## Examples
+## Usage
+
+Open project file with preferred Xcode version:
+```
+xc
+```
+
+Open project file with Xcode 14.2.0:
+```
+xc -v 14.2.0
+```
 
 ```
-$ xc -v 14.2.0 # Open project file with Xcode 14.2.0
-```
+xc list
 
-```
-$ xc list
+---
 Available Xcode:
 14.2    /Applications/Xcode.app         <xcode-select>
 14.1    /Applications/Xcode14.1.app
@@ -33,7 +41,9 @@ Available Xcode:
 Automatically searching xcode via `NSWorkspace.shared.urlsForApplications(withBundleIdentifier: "com.apple.dt.Xcode")`.
 
 ```
-$ xc list
+xc list
+
+---
 Available Xcode:
 14.2    /Applications/Xcode.app         <xcode-select>
 14.1    /Applications/Xcode14.1.app
@@ -43,8 +53,9 @@ Available Xcode:
 
 ### Open Xcode.app without opening project
 
+Simply run:
 ```
-$ xc -n
+xc -n
 ```
 
 ### Automatically changing developer directory via xcode-select
@@ -115,8 +126,9 @@ You can also install xc by downloading `xc.zip` from the latest GitHub release.
 ## Help
 
 ```
-$ xc --help
+xc --help
 
+---
 OVERVIEW: This tool launches the Xcode application and opens the given documents.
 
 USAGE: xc <subcommand>
@@ -135,7 +147,9 @@ SUBCOMMANDS:
 ```
 
 ```
-$ xc open --help
+xc open --help
+
+---
 OVERVIEW: Shows available versions of Xcode
 
 USAGE: xc open [-v <v>] [<path>]
