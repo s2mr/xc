@@ -1,5 +1,5 @@
-# xc (EXPERIMENTAL)
-Open your xcode project with Xcode of specific version.
+# xc
+Open the Xcode project file with the specified version
 
 ## Examples
 
