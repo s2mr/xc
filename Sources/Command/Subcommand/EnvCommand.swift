@@ -7,9 +7,9 @@ extension MainTool {
         )
 
         func run() throws {
-            let preferredVersion = try Xcode.preferredVersion(userSpecifyVersion: nil)
-            let xcodeVersion = try CurrentDirectory.xcodeVersion()
-            let xcodeSelectVersion = try Xcode.xcodeSelectVersion()
+            let preferredVersion = try? Xcode.preferredVersion(userSpecifyVersion: nil)
+            let xcodeVersion = try? CurrentDirectory.xcodeVersion()
+            let xcodeSelectVersion = try? Xcode.xcodeSelectVersion()
             let dataSets = [
                 VersionDataSet(name: ".xcode-version", version: xcodeVersion),
                 VersionDataSet(name: " $xcode-select", version: xcodeSelectVersion),
@@ -27,12 +27,18 @@ extension MainTool {
                 return print("Project file not found in current directory.")
             }
 
-            let xcworkspaceURL = try CurrentDirectory.xcworkspaceURL()
-            let xcodeprojURL = try CurrentDirectory.xcodeprojURL()
-            let packageSwiftURL = try CurrentDirectory.packageSwiftURL()
+            let xcworkspaceURL = try? CurrentDirectory.xcworkspaceURL()
+            let xcodeprojURL = try? CurrentDirectory.xcodeprojURL()
+            let packageSwiftURL = try? CurrentDirectory.packageSwiftURL()
             print(" .xcworkspace: \(xcworkspaceURL?.lastPathComponent ?? "")\t\(xcworkspaceURL == preferredProjectFileURL ? "<Preferred>" : "")")
             print("   .xcodeproj: \(xcodeprojURL?.lastPathComponent ?? "")\t\(xcodeprojURL == preferredProjectFileURL ? "<Preferred>" : "")")
             print("Package.swift: \(packageSwiftURL?.lastPathComponent ?? "")\t\(packageSwiftURL == preferredProjectFileURL ? "<Preferred>" : "")")
+
+            print()
+            print("# xcode-select --print-path")
+            let result = Bash.launchSync("xcode-select --print-path")
+            print("Version:", xcodeVersion ?? "")
+            print(" Result:", result.standardOutput.string() ?? "")
         }
     }
 }
