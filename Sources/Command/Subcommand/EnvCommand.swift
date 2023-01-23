@@ -37,7 +37,7 @@ extension MainTool {
             print()
             print("# xcode-select --print-path")
             let result = Bash.launchSync("xcode-select --print-path")
-            print("Version:", xcodeVersion ?? "")
+            print("Version:", xcodeSelectVersion ?? "")
             print(" Result:", result.standardOutput.string() ?? "")
         }
     }
