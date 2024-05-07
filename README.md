@@ -8,9 +8,9 @@ Open project file with preferred Xcode version:
 xc
 ```
 
-Open project file with Xcode 14.2.0:
+Open project file with Xcode 15.3.0:
 ```
-xc -v 14.2.0
+xc -v 15.3.0
 ```
 
 ```
