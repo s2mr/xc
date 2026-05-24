@@ -162,3 +162,13 @@ OPTIONS:
   --version               Show the version.
   -h, --help              Show help information.
 ```
+
+## Star History
+
+<a href="https://www.star-history.com/#s2mr/xc&Date">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=s2mr/xc&type=Date&theme=dark" />
+    <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/svg?repos=s2mr/xc&type=Date" />
+    <img alt="Star History Chart" src="https://api.star-history.com/svg?repos=s2mr/xc&type=Date" />
+  </picture>
+</a>
